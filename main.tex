@@ -71,13 +71,42 @@ Nous pouvons constaté qu'avec la commande \texttt{xxd}, que le séparateur des 
   \item Which are the three days with the most accesses? Hint: Create first a pipeline that produces a list of dates preceded by the count of log entries on that date.\\
   \texttt{cut -f3 ads\_website.log | cut -c2-12 | sort | uniq -c | sort -gr | head -3}
   
-  \item Which is the user agent string with the most accesses?
-  \item If a web site is very popular and accessed by many people the user agent strings appearing in the server's log can be used to estimate the relative market share of the users' computers and operating systems. How many accesses were done from browsers that declare that they are running on Windows, Linux and Mac OS X?
-  \item Read the documentation for the tee command. Repeat the analysis of the previous question for browsers running on Windows and insert tee into the pipeline such that the user agent strings (including repeats) are written to a file for further analysis (the filename should be useragents.txt). What are the operating systems Windows NT 6.1, 6.2 and 6.3?
+  \item Which is the user agent string with the most accesses?\\
+  \texttt{cut ads\_website.log -f17 | sort | uniq -c | sort -nr | head -1}\\
+  \texttt{"Mozilla/5.0 (Windows NT 6.3; WOW64; rv:27.0) Gecko/20100101 Firefox/27.0"} avec 423 occurences.\\
+  
+  
+  \item If a web site is very popular and accessed by many people the user agent strings appearing in the server's log can be used to estimate the relative market share of the users' computers and operating systems. How many accesses were done from browsers that declare that they are running on Windows, Linux and Mac OS X? \\
+  - Windows : 1751, avec la commande \texttt{cut ads\_website.log -f17 | grep -ci 'Windows'} \\
+  - Linux   : 180, avec la commande \texttt{cut ads\_website.log -f17 | grep -ci 'Linux' 
+}\\
+  - Linux sans Android  : 164, avec la commande \texttt{cut ads\_website.log -f17 | grep -v 'Android' | grep -ci 'Linux'}\\
+  - Mac OS X: 693, avec la commande \texttt{cut ads\_website.log -f17 | grep -ci 'Mac OS X' 
+}\\
+  - Mac OS X sans Iphone \& Ipad: 643, avec la commande \texttt{cut ads\_website.log -f17 | grep -vEi 'iPhone|iPad' | grep -ci 'Mac OS X' }\\
+  
+  \item Read the documentation for the tee command. Repeat the analysis of the previous question for browsers running on Windows and insert tee into the pipeline such that the user agent strings (including repeats) are written to a file for further analysis (the filename should be useragents.txt). What are the operating systems Windows NT 6.1, 6.2 and 6.3?\\
+  Commande : \texttt{cut ads\_website.log -f17 | tee useragents.txt |grep -ci 'Windows'}\\
+  Windows NT 6.1 : Windows 7 ou Windows Server 2008R2\\
+  Windows NT 6.2 : Windows 8 ou Windows Server 2012\\
+  Windows NT 6.3 : Windows 8.1 ou Windows Server 2012R2\\ 
+  
+  
+  \item Why is the file access.log difficult to analyse, consider for example the analysis of question 7, with the commands you have seen so far?  \\
+  Le problème previent du fait que les champs sont séparés par des espaces. Ce séparateur est aussi présent à l'interieur des champs et donc cut n'arrive pas à traiter ces champs correctements. \\
+  La commande a utilisée est donc : \texttt{sed -E 's\/^[0-9.]+ [^ ]+ [^ ]+ \\[[^]]+\\] "([^"]+)" ([0-9]+).+/\\2 \\1/g' access.log | sort -u}
+  
+  \texttt{sed -E 's/^[0-9.]+ [^ ]+ [^ ]+ \[[^]]+\] "[^"]+" ([0-9]+).+/\1/g' access.log | sort -u}
+  
+  
 \end{enumerate}
 
 
 \section{Task3 - Conversion to CSV}
+\question{Produce a CSV file named accesses.csv that contains for each day (given by its date) the number of accesses on that day. Transfer that file to your workstation and use spreadsheet software to import the CSV file. Plot the data in a graph and produce a file named accesses.pdf.}
 
+\texttt{ cut -f3 ads\_website.log | cut -c2-12 | sort | uniq -c | grep -oiE "[0-9]+ [a-z0-9/]+" | tr ' ' ',' > access.csv}
+
+Le graphique est en annexe : access.pdf
 
 \end{document}
