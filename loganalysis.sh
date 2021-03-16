@@ -48,4 +48,4 @@ echo -n '09b User agent strings (with duplicates): '
 cat useragents.txt
 
 echo -n '10 Bonus List of unique status code in access.log: '
-
+sed -E 's/^[0-9.]+ [^ ]+ [^ ]+ \[[^]]+\] "[^"]+" ([0-9]+).+/\1/g' access.log | sort -u

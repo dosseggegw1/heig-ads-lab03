@@ -94,10 +94,14 @@ Nous pouvons constaté qu'avec la commande \texttt{xxd}, que le séparateur des 
   
   \item Why is the file access.log difficult to analyse, consider for example the analysis of question 7, with the commands you have seen so far?  \\
   Le problème previent du fait que les champs sont séparés par des espaces. Ce séparateur est aussi présent à l'interieur des champs et donc cut n'arrive pas à traiter ces champs correctements. \\
-  La commande a utilisée est donc : \texttt{sed -E 's\/^[0-9.]+ [^ ]+ [^ ]+ \\[[^]]+\\] "([^"]+)" ([0-9]+).+/\\2 \\1/g' access.log | sort -u}
-  
-  \texttt{sed -E 's/^[0-9.]+ [^ ]+ [^ ]+ \[[^]]+\] "[^"]+" ([0-9]+).+/\1/g' access.log | sort -u}
-  
+  La commande a utilisée est donc :
+%  \texttt{sed -E 's\/^[0-9.]+ [^ ]+ [^ ]+ \\[[^]]+\\] "([^"]+)" ([0-9]+).+/\\2 \\1/g' access.log | sort -u}
+%
+%  \textasciicircum
+  \texttt{sed -E 's/\textasciicircum[0-9.]+ [\textasciicircum ]+ [\textasciicircum ]+ \textbackslash[[\textasciicircum]]+\textbackslash] "[\textasciicircum"]+" ([0-9]+).+/\textbackslash1/g' access.log | sort -u}
+%  \texttt{sed -E 's/\^[0-9.]+ [\^ ]+ [\^ ]+ \\[[\^]]+\\] "[\^"]+" ([0-9]+).+/\\1/g' access.log | sort -u}
+%  \texttt{\^}
+
   
 \end{enumerate}
 
