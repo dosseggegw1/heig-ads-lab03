@@ -42,7 +42,7 @@ echo -n '08c Number of accesses from Mac OS X machines Without iPhone and iPad: 
 cut ads_website.log -f17 | grep -vEi 'iPhone|iPad' | grep -ci 'Mac OS X'
 
 echo -n '09a Number of accesses from Windows machines: '
-cut ads_website.log -f17 | tee useragents.txt |grep -ci 'Windows'
+cut ads_website.log -f17 | tee useragents.txt | grep -ci 'Windows'
 
 echo -n '09b User agent strings (with duplicates): '
 cat useragents.txt
